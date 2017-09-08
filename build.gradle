@@ -1,0 +1,22 @@
+allprojects {
+    group 'com.splat.test.task.java.first'
+    version '1.0-SNAPSHOT'
+
+    apply plugin: 'java'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+        mavenCentral()
+        jcenter()
+        mavenLocal()
+    }
+
+    dependencies {
+        compileOnly 'org.projectlombok:lombok:+'
+        testCompile 'org.junit.jupiter:junit-jupiter-api:+',
+                'org.projectlombok:lombok+',
+                'org.hamcrest:java-hamcrest:+'
+    }
+}
