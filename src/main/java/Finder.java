@@ -14,18 +14,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Data
-public class Finder implements FileVisitor{
+public class Finder implements FileVisitor {
 
-   private Pattern search;
-   private Pattern ext;
-   private Path dir;
-   private ArrayList<Container> files_matched;
+    private Pattern search;
+    private Pattern ext;
+    private Path dir;
+    private ArrayList<Container> files_matched;
 
-   public Finder(Path directory,String extension,String searchText){
-         ext= Pattern.compile("\\." + extension + "$");
-         search=Pattern.compile("("+searchText+")+");
-         dir=directory;
-         files_matched=new ArrayList<>(1);
+    public Finder(Path directory, String extension, String searchText) {
+        ext = Pattern.compile("\\." + extension + "$");
+        search = Pattern.compile("(" + searchText + ")+");
+        dir = directory;
+        files_matched = new ArrayList<>(1);
     }
 
     @Override
@@ -36,12 +36,10 @@ public class Finder implements FileVisitor{
     @Override
     public FileVisitResult visitFile(Object file, BasicFileAttributes attrs) throws IOException {
 
-       if(ext.matcher(file.toString()).find())
-        {
-            Container container= new Container(readFromFile(file.toString()),file.toString());
-            if(matchInText(container.getContent()))
+        if (ext.matcher(file.toString()).find()) {
+            Container container = new Container(file.toString());
+            if (matchInText(container.getName_of_file()))
                 files_matched.add(container);
-
         }
         Collections.sort(files_matched);
         return FileVisitResult.CONTINUE;
@@ -56,12 +54,13 @@ public class Finder implements FileVisitor{
     public FileVisitResult postVisitDirectory(Object dir, IOException exc) throws IOException {
         return FileVisitResult.CONTINUE;
     }
+
     public StringBuilder readFromFile(String dir1) throws FileNotFoundException {
-        StringBuilder cont=new StringBuilder();
+        StringBuilder cont = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(dir1))) {
             String s;
-            while((s=br.readLine())!=null){
-                   cont.append(s).append('\n');
+            while ((s = br.readLine()) != null) {
+                cont.append(s).append('\n');
             }
            /* try(FileChannel ch=new FileInputStream(dir1).getChannel()){
                 byte[] barray= new byte[262144];
@@ -79,9 +78,19 @@ public class Finder implements FileVisitor{
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        return  cont;
+        return cont;
     }
-    public boolean matchInText(StringBuilder cont){
-       return search.matcher(cont.toString()).find();
+
+    private boolean matchInText(String dir) {
+        try (BufferedReader br = new BufferedReader(new FileReader(dir))) {
+            String s;
+            while ((s = br.readLine()) != null) {
+                if (search.matcher(s).find())
+                    return true;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

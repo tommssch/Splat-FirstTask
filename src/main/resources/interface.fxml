@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.embed.swing.*?>
+<?import javafx.scene.chart.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane fx:id="main"  maxHeight="1200" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="765.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+<Pane fx:id="main" maxHeight="1200" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="765.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
    <children>
       <TitledPane collapsible="false" layoutY="240.0" prefHeight="511.0" prefWidth="600.0" text="Match in files">
         <content>
@@ -17,10 +25,10 @@
          <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="480.0" prefWidth="585.0">
                <children>
-                  <Button layoutX="382.0" layoutY="408.0" mnemonicParsing="false" text="Forward" AnchorPane.rightAnchor="120.0" />
-                  <Button layoutX="259.0" layoutY="408.0" mnemonicParsing="false" text="Select All" />
-                  <Button layoutX="120.0" layoutY="408.0" mnemonicParsing="false" text="Backward" AnchorPane.leftAnchor="120.0" />
-                  <TextArea layoutX="-1.0" layoutY="-4.0" prefHeight="408.0" prefWidth="600.0" />
+                  <Button fx:id="forwd" layoutX="382.0" layoutY="408.0" mnemonicParsing="false" onAction="#selectForward" text="Forward" AnchorPane.rightAnchor="120.0" />
+                  <Button layoutX="259.0" layoutY="408.0" mnemonicParsing="false" onAction="#selectAll" text="Select All" />
+                  <Button layoutX="120.0" layoutY="408.0" mnemonicParsing="false" onAction="#selectBack" text="Backward" AnchorPane.leftAnchor="120.0" />
+                  <TextArea fx:id="output" style="-fx-highlight-fill: firebrick;-fx-highlight-text-fill: yellow;-fx-font-size: 20px" layoutX="-1.0" layoutY="-4.0" prefHeight="408.0" prefWidth="600.0" />
                </children></AnchorPane>
          </content>
       </TitledPane>
@@ -28,10 +36,10 @@
       <TextField fx:id="searchText" layoutX="678.0" layoutY="61.0" prefHeight="31.0" prefWidth="495.0" />
       <Label layoutX="22.0" layoutY="66.0" text="Choose directory:" />
       <Label layoutX="555.0" layoutY="66.0" text="Search text:" />
-      <Button layoutX="924.0" layoutY="171.0" mnemonicParsing="false" onAction="#startFind" prefHeight="31.0" prefWidth="180.0" text="Start" />
+      <Button fx:id="starter" layoutX="924.0" layoutY="171.0" mnemonicParsing="false" onAction="#startFind" prefHeight="31.0" prefWidth="180.0" text="Start" />
       <Button layoutX="460.0" layoutY="61.0" mnemonicParsing="false" onAction="#browseDir" text="Browse" />
       <Button layoutX="1069.0" layoutY="102.0" mnemonicParsing="false" onAction="#clearButton" prefHeight="31.0" prefWidth="104.0" text="Clear" />
       <Label layoutX="22.0" layoutY="123.0" text="Choose file extension:" />
-      <TextField fx:id="ext" layoutX="178.0" layoutY="118.0" />
+      <TextField fx:id="ext" layoutX="178.0" layoutY="118.0" promptText="log" />
    </children>
 </Pane>
