@@ -1,96 +1,104 @@
 import lombok.Data;
-import lombok.Getter;
-
+import java.awt.*;
 import java.io.*;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
+import java.nio.charset.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.regex.Matcher;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
+//Класс реализующий механизм обхода файловой системы и поиска файлов с искомым текстом
 @Data
 public class Finder implements FileVisitor {
-
+    private String search_text;
     private Pattern search;
     private Pattern ext;
     private Path dir;
-    private ArrayList<Container> files_matched;
+    private final ArrayList<Container> files_matched;
+    private ExecutorService service;
 
     public Finder(Path directory, String extension, String searchText) {
         ext = Pattern.compile("\\." + extension + "$");
         search = Pattern.compile("(" + searchText + ")+");
         dir = directory;
         files_matched = new ArrayList<>(1);
+        this.search_text=searchText;
+        service=Executors.newCachedThreadPool();
     }
 
     @Override
-    public FileVisitResult preVisitDirectory(Object dir, BasicFileAttributes attrs) throws IOException {
-        return FileVisitResult.CONTINUE;
-    }
+    public FileVisitResult preVisitDirectory(Object dir, BasicFileAttributes attrs) {
 
-    @Override
-    public FileVisitResult visitFile(Object file, BasicFileAttributes attrs) throws IOException {
-
-        if (ext.matcher(file.toString()).find()) {
-            Container container = new Container(file.toString());
-            if (matchInText(container.getName_of_file()))
-                files_matched.add(container);
+        File[] files=new File(dir.toString()).listFiles();
+        if(files==null) {
+            return FileVisitResult.CONTINUE;
         }
-        Collections.sort(files_matched);
-        return FileVisitResult.CONTINUE;
-    }
+        else
+            for (final File file : files) {
+                if (!file.isFile())
+                    continue;
 
-    @Override
-    public FileVisitResult visitFileFailed(Object file, IOException exc) throws IOException {
-        return FileVisitResult.CONTINUE;
-    }
-
-    @Override
-    public FileVisitResult postVisitDirectory(Object dir, IOException exc) throws IOException {
-        return FileVisitResult.CONTINUE;
-    }
-
-    public StringBuilder readFromFile(String dir1) throws FileNotFoundException {
-        StringBuilder cont = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader(dir1))) {
-            String s;
-            while ((s = br.readLine()) != null) {
-                cont.append(s).append('\n');
+                if (ext.matcher(file.toString()).find()) {
+                    System.out.println(Thread.currentThread().getName()+" "+file.getAbsolutePath());
+                    service.execute(() -> {
+                        synchronized (files_matched) {
+                            if (matchInText(file.toString())) {
+                                Container container = new Container(file.toString());
+                                files_matched.add(container);
+                            }
+                        }
+                    });
+                }
             }
-           /* try(FileChannel ch=new FileInputStream(dir1).getChannel()){
-                byte[] barray= new byte[262144];
-                ByteBuffer bb=ByteBuffer.wrap(barray);
-                long checkSum=0L;
-                int nRead;
-                while ((nRead=ch.read(bb))!=-1){
-                    for (int i=0;i<nRead;i++){
-                        System.out.println(Arrays.toString(barray));
-                        checkSum += barray[i];
-                    }
 
-                    bb.clear();
-                }*/
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        return cont;
+        return FileVisitResult.CONTINUE;
+    }
+    @Override
+    public FileVisitResult visitFile(Object file, BasicFileAttributes attrs) {
+        return FileVisitResult.CONTINUE;
     }
 
-    private boolean matchInText(String dir) {
-        try (BufferedReader br = new BufferedReader(new FileReader(dir))) {
-            String s;
-            while ((s = br.readLine()) != null) {
-                if (search.matcher(s).find())
+    @Override
+    public FileVisitResult visitFileFailed(Object file, IOException exc) {
+        return FileVisitResult.CONTINUE;
+    }
+
+    @Override
+    public FileVisitResult postVisitDirectory(Object dir, IOException exc) {
+
+        return FileVisitResult.CONTINUE;
+    }
+
+    private boolean matchInText(String dir){
+        Path path=Paths.get(dir);
+        try(BufferedReader br=Files.newBufferedReader(path,Charset.defaultCharset())){
+            for(String line;(line=br.readLine())!=null;)
+                if(search.matcher(line).find())
                     return true;
+        }
+        catch(IOException e){
+            try(BufferedReader br=Files.newBufferedReader(path,StandardCharsets.UTF_8)) {
+                for (String line; (line = br.readLine()) != null; )
+                    if (search.matcher(line).find())
+                        return true;
+            } catch (IOException e1) {
+                e1.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return false;
+    }
+    public void close(){
+        service.shutdown();
+        try {
+            service.awaitTermination(30,TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Toolkit.getDefaultToolkit().beep();
+        Collections.sort(files_matched);
     }
 }

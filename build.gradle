@@ -14,9 +14,9 @@ allprojects {
     }
 
     dependencies {
+        compile 'org.fxmisc.richtext:richtextfx:+'
         compileOnly 'org.projectlombok:lombok:+'
         testCompile 'org.junit.jupiter:junit-jupiter-api:+',
-                'org.projectlombok:lombok+',
-                'org.hamcrest:java-hamcrest:+'
+                'org.projectlombok:lombok+'
     }
 }
