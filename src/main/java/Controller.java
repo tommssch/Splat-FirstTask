@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//Класс обрабатывающий запросы от пользователя
+//РљР»Р°СЃСЃ РѕР±СЂР°Р±Р°С‚С‹РІР°СЋС‰РёР№ Р·Р°РїСЂРѕСЃС‹ РѕС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
 @SuppressWarnings("unchecked")
 public class Controller
 {
@@ -103,7 +103,7 @@ public class Controller
             startThread();
         }
     }
-    //метод по поиску файлов
+    //РјРµС‚РѕРґ РїРѕ РїРѕРёСЃРєСѓ С„Р°Р№Р»РѕРІ
     private void startThread(){
         Path path = Paths.get(dir.getText());
         String exten = ext.getText().equals("") ? ext.getPromptText() : ext.getText();
@@ -130,7 +130,7 @@ public class Controller
                     }};}};
         service.start();
     }
-    //метод по заполнению TreeView результами поиска
+    //РјРµС‚РѕРґ РїРѕ Р·Р°РїРѕР»РЅРµРЅРёСЋ TreeView СЂРµР·СѓР»СЊС‚Р°РјРё РїРѕРёСЃРєР°Г 
     private TreeItem fillTree(Finder finder){
         String s;
         if(dir.getText().charAt(dir.getText().length()-1)=='\\')
@@ -187,7 +187,7 @@ public class Controller
         }
         return null;
     }
-    //метод по выводу содержимого файла пользователю
+    //РјРµС‚РѕРґ РїРѕ РІС‹РІРѕРґСѓ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ С„Р°Р№Р»Р° РїРѕР»СЊР·РѕРІР°С‚РµР»СЋ
     private void addListener(){
         table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             try
@@ -236,7 +236,7 @@ public class Controller
         }
 
     }
-    //метод выделения искомого текста
+    //РјРµС‚РѕРґ РІС‹РґРµР»РµРЅРёСЏ РёСЃРєРѕРјРѕРіРѕ С‚РµРєСЃС‚Р°
     public void selectForward() {
 
         if(at!=null)
@@ -299,7 +299,7 @@ public class Controller
         vsp.setFocusTraversable(true);
         initVspListener(vsp);
     }
-    // Слушатель для передвижение по найденному в файле.подгрузка файлов( механизм обеспечивающий считывание больших файлов)
+    // РЎР»СѓС€Р°С‚РµР»СЊ РґР»СЏ РїРµСЂРµРґРІРёР¶РµРЅРёРµ РїРѕ РЅР°Р№РґРµРЅРЅРѕРјСѓ РІ С„Р°Р№Р»Рµ.РїРѕРґРіСЂСѓР·РєР° С„Р°Р№Р»РѕРІ( РјРµС…Р°РЅРёР·Рј РѕР±РµСЃРїРµС‡РёРІР°СЋС‰РёР№ СЃС‡РёС‚С‹РІР°РЅРёРµ Р±РѕР»СЊС€РёС… С„Р°Р№Р»РѕРІ)
     private void initVspListener(VirtualizedScrollPane vsp){
         vsp.addEventFilter(ScrollEvent.SCROLL,event -> {
 
@@ -328,7 +328,7 @@ public class Controller
                     textArea.insertText(0,buffer.toString());
                     position_up--;
                 }
-                //внутри TextArea может храниться только 600 строк
+                //РІРЅСѓС‚СЂРё TextArea РјРѕР¶РµС‚ С…СЂР°РЅРёС‚СЊСЃСЏ С‚РѕР»СЊРєРѕ 600 СЃС‚СЂРѕРє
                 if(num_of_lines>600)
                 {
                     textArea.clear();
@@ -350,7 +350,7 @@ public class Controller
             }
         });
     }
-    //методы по проверке полей
+    //РјРµС‚РѕРґС‹ РїРѕ РїСЂРѕРІРµСЂРєРµ РїРѕР»РµР№
     private boolean checkFields(){
         if(dir.getText().equals("")||(searchText.getText().equals("")))
         {
