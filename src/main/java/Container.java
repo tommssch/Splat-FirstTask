@@ -4,7 +4,7 @@ import lombok.NoArgsConstructor;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-//Контейнер для хранения абсолютного пути файла,реализующий интерфейс для сортировки
+//РљРѕРЅС‚РµР№РЅРµСЂ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ Р°Р±СЃРѕР»СЋС‚РЅРѕРіРѕ РїСѓС‚Рё С„Р°Р№Р»Р°,СЂРµР°Р»РёР·СѓСЋС‰РёР№ РёРЅС‚РµСЂС„РµР№СЃ РґР»СЏ СЃРѕСЂС‚РёСЂРѕРІРєРё
 @Data
 @AllArgsConstructor
 public class Container implements Comparable<Container> {
