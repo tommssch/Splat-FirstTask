@@ -8,7 +8,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import java.io.*;
-//Запуск сцены с иницилизацией табфолдера
+//Р—Р°РїСѓСЃРє СЃС†РµРЅС‹ СЃ РёРЅРёС†РёР»РёР·Р°С†РёРµР№ С‚Р°Р±С„РѕР»РґРµСЂР°
 public class Main extends Application {
    private int i=1;
    private TabPane tabPane;
@@ -28,7 +28,7 @@ public class Main extends Application {
         launch(args);
     }
 
-    //Метод по добавлению табов
+    //ГЊГҐГІГ®Г¤ ГЇГ® Г¤Г®ГЎГ ГўГ«ГҐГ­ГЁГѕ ГІГ ГЎГ®Гў
     private void addTabs() throws IOException {
         Pane root= FXMLLoader.load(getClass().getResource("interface.fxml"));
         Tab tab=new Tab("Tab "+String.valueOf(i++));
@@ -46,7 +46,7 @@ public class Main extends Application {
         tabPane.getTabs().set(tabPane.getTabs().size()-1,tab);
         tabPane.getTabs().add(tb);
     }
-    //Инициализация кнопки по добавлению табов
+    //Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї ГЄГ­Г®ГЇГЄГЁ ГЇГ® Г¤Г®ГЎГ ГўГ«ГҐГ­ГЁГѕ ГІГ ГЎГ®Гў
     private void initAddButton(){
         Tab add_tab=new Tab();
         add_tab.setClosable(false);
