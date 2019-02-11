@@ -11,7 +11,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
-//Класс реализующий механизм обхода файловой системы и поиска файлов с искомым текстом
+//Класс реализующий механизм обхода заданного каталога и поиска файлов с искомым текстом
 @Data
 public class Finder implements FileVisitor {
     private String search_text;
