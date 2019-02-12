@@ -308,7 +308,7 @@ public class Controller
 
             try {
                 buffer.delete(0,buffer.length());
-                if(((Double)vsp.totalHeightEstimateProperty().getValue()-383.0==vsp.getEstimatedScrollY())
+                if(((Double)vsp.totalHeightEstimateProperty().getValue()<=vsp.getEstimatedScrollY()+420)
                         && (event.getDeltaY()<0))
                     add100lines(bufread);
                 if(vsp.getEstimatedScrollY()==0&&position_up>0&&event.getDeltaY()>0)
